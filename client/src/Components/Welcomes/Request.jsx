@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState, useContext} from "react";
 import { socket } from "../../socket";
 import { CallDialog } from "./CallDialog";
-import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId } from "../../Context";
+import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../Context";
 import { Navigate } from "react-router-dom";
 
 // JSS CSS START
@@ -52,10 +52,11 @@ export const Request = ({competitor}) =>{
     const [navigateToPlaypage, setNavigateToPlaypage] = useState(false)
 
     // Context
-    const {allCompetitors, setAllCompetitors} = useContext(AllCompetitors)
+    const {setAllCompetitors} = useContext(AllCompetitors)
     const {currentUser} = useContext(UserNameContext)
     const {currentUserImg} = useContext(ImageUrlContext)
     const {setRoomId} = useContext(RoomId)
+    const {setRandomTextIndex} = useContext(RandomTextIndexContext)
 
     let joinnedCompetitors = [] // Array of joinned competitors
 
@@ -72,8 +73,19 @@ export const Request = ({competitor}) =>{
     }, [competitor])
 
     const sendRequestFnc = () =>{
+        // Get random number for indexing the text to be displayed while playing
+        const randomNumber = Math.floor(Math.random() * 16)
+        setRandomTextIndex(randomNumber)
         socket.emit("request", 
-        [competitor,{"socketId":socket.id, "callerName": currentUser, "callerImg":currentUserImg, "position": 0}])
+        [competitor,
+            {
+                "socketId":socket.id, 
+                "callerName": currentUser, 
+                "callerImg":currentUserImg, 
+                "position": 0,
+                "randomNumber": randomNumber
+            }
+        ])
         setSendRequest(true)
         setTimeout(() => { 
             setSendRequest(false)  // Hide the show request... message on the screen
@@ -92,6 +104,7 @@ export const Request = ({competitor}) =>{
     socket.on("call", (callerInfo) =>{
         setDisplayDialog(true)
         setCaller(callerInfo)
+        
         setTimeout(() => {
             // Close dialog
             setDisplayDialog(false)

@@ -9,7 +9,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom"
-import { UserNameContext, ImageUrlContext, AllCompetitors, RoomId } from './Context';
+import { UserNameContext, ImageUrlContext, AllCompetitors, RoomId, RandomTextIndexContext} from './Context';
 
 
 
@@ -19,6 +19,7 @@ function App() {
   const [currentUserImg, setCurrentUserImg] = useState(null)
   const [allCompetitors, setAllCompetitors] = useState([])
   const [roomId, setRoomId] = useState(null)
+  const [randomTextIndex, setRandomTextIndex] = useState(null)
   return (
     <UserNameContext.Provider
       value={{
@@ -44,16 +45,23 @@ function App() {
             setRoomId
           }}>
 
-            
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Welcome/>} />
-                <Route path="/request" element={<RequestUser/>} />
-                <Route path="/start" element={<Start/>} />
-              </Routes>
-            </BrowserRouter>
+            <RandomTextIndexContext.Provider
+            value={{
+              randomTextIndex, 
+              setRandomTextIndex
+            }}>
 
 
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Welcome/>} />
+                  <Route path="/request" element={<RequestUser/>} />
+                  <Route path="/start" element={<Start/>} />
+                </Routes>
+              </BrowserRouter>
+
+              
+            </RandomTextIndexContext.Provider>
           </RoomId.Provider>
         </AllCompetitors.Provider>
       </ImageUrlContext.Provider>

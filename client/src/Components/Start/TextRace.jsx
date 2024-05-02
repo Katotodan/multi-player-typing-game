@@ -1,7 +1,8 @@
 import React,{useEffect, useState, useRef, useContext} from "react";
 import data from "../../Components/Start/text.json"
 import { socket } from "../../socket";
-import { RoomId } from "../../Context";
+import { RoomId, AllCompetitors } from "../../Context";
+import { Link } from "react-router-dom";
 
 
 // JSS CSS START
@@ -17,20 +18,43 @@ const styles = {
         borderRadius: 5,
         fontSize: "1.2rem",
         marginTop: "1rem"
+    },
+    link:{
+        textDecoration:"none",
+        color: "black",
+        backgroundColor: "#eee",
+        display: "inline-block",
+        padding:" 0.5rem 1rem",
+        marginTop: "2rem"
     }
 }
 const useStyles = createUseStyles(styles)
 
 
-export const RaceText = ({yourPercentage}) =>{
+export const RaceText = ({yourPercentage, randomTextIndex}) =>{
     const classes = useStyles()
     const str = useRef(null)
     const [percentage, setPercentage] = useState(0)
     const {roomId} = useContext(RoomId)
     const [inputText, setInputText] = useState("")
-    const [text, setText] = useState(data[Math.floor(Math.random() * 16)].text)
+    const [text, setText] = useState("")
     const [splittedtext, setSplittedText] = useState(text.split(''))
+
+    const {allCompetitors} = useContext(AllCompetitors)
     
+    useEffect(() =>{
+        if(randomTextIndex){
+            setText(data[randomTextIndex]?.text)
+        }else{
+            // You are alone in this race
+            setText(data[Math.floor(Math.random() * 16)]?.text)
+
+        }        
+    },[])
+
+    useEffect(() =>{
+        setSplittedText(text.split(''))
+    }, [text])
 
     useEffect(() =>{
         yourPercentage(percentage)
@@ -39,11 +63,19 @@ export const RaceText = ({yourPercentage}) =>{
 
     const inData = splittedtext.map((el, index) => (
         <span key={index}>{el}</span>
-      ))
+    ))
     
     
     const gameWon = () =>{
-        alert("You win")
+        // propose to start the race
+        let occupiedPlace = 1
+        for(let campetitor of allCompetitors){
+            if(campetitor.position === 100){
+                occupiedPlace++
+            }
+        }
+        console.log(allCompetitors)
+        alert("Game over, you have the " + occupiedPlace + "place")
     }
 
     const handleChange = (e) => {
@@ -67,8 +99,13 @@ export const RaceText = ({yourPercentage}) =>{
             <div className="text" ref={str}>{inData}</div>
             <input type="text" className={classes.input} 
             placeholder="Type here" value={inputText} onChange={handleChange}/>
+
+            {percentage === 100 ?
+             <Link to="/request" className={classes.link}>Back to start Game</Link> :
+             <button className={classes.link}>Leave the race</button>}
+            
         </div>  
     )
 }
 
-// Moving car and ajusting the %
+// Working on socket disconnection state

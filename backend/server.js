@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
   socket.on("callAccepted", ([competitorInfo, callerId]) =>{
     io.to(callerId).emit("competitor_join", competitorInfo)
     socket.join(callerId + " room")
-  })
+  })   
   
   socket.on("sendCompetitor", (competitors) =>{
     for(let competitor of competitors){
@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
   })
   socket.on("sendPercentage", ([formSocketId, percentage, roomId]) =>{
     io.to(roomId +" room").emit("receivePercentag", [formSocketId, percentage])
-  })  
+  })   
 
 //  Working on this later
   // socket.on('disconnect', () => {
@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
 });
 app.get("/getUser", (req, res) =>{
   res.send(onlineUser)
-})
+})   
 
 
 server.listen(5000, () => {

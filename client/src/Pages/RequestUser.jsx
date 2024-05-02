@@ -20,7 +20,7 @@ export const RequestUser = () =>{
     const {currentUser} = useContext(UserNameContext)
     const {currentUserImg} = useContext(ImageUrlContext)
     const [competitor, setCompetitor] = useState([])
-    
+     
 
     const selectedCompetitor = (competitors) =>{
         setCompetitor(competitors)
