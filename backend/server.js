@@ -17,7 +17,7 @@ const io = new Server(server, {
   }
 }); 
       
-const onlineUser = []
+let onlineUser = []
  
 
 io.on('connection', (socket) => {
@@ -56,20 +56,17 @@ io.on('connection', (socket) => {
   })
   socket.on("sendPercentage", ([formSocketId, percentage, roomId]) =>{
     io.to(roomId +" room").emit("receivePercentag", [formSocketId, percentage])
-  })   
+  })    
 
-//  Working on this later
-  // socket.on('disconnect', () => {
-  //   socket.broadcast.emit("userDisconnect", {
-  //     "socketId": socket.id,
-  //   })
-  //   console.log("socket disconnect " + socket.id)
-  //   onlineUser.filter(user => user.socketId !== socket.id)
+  socket.on('disconnect', () => {
     
+    onlineUser = onlineUser.filter(user => user.socketId !== socket.id)
+    socket.broadcast.emit("userDisconnect", onlineUser)
     
-  // })
+  })
+
   
-});
+});    
 app.get("/getUser", (req, res) =>{
   res.send(onlineUser)
 })   

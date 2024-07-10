@@ -46,21 +46,37 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
         .then((res) => setOnlineUser(res.data))
         .catch((err) => console.log("Error" + err))
 
+        // Socket config
+        socket.on("newUser", (data) =>{
+            setOnlineUser([
+                ...onlineUser,
+                data
+            ])
+        })
+
+        socket.on("userDisconnect", (users) =>{
+            console.log(users)
+            setOnlineUser(users)
+        })
+
+        return () =>{
+            socket.off("userDisconnect", (users) =>{setOnlineUser(users) })
+            socket.off("newUser", (data) =>{
+                setOnlineUser([
+                    ...onlineUser,
+                    data
+                ])
+            })
+        }
+
     }, [])
+    
 
     useEffect(() =>{
         selectedCompetitor(selectedUser)
     }, [selectedUser])
 
-    socket.on("newUser", (data) =>{
-        setOnlineUser([
-            ...onlineUser,
-            data
-        ])
-    })
-    socket.on("userDisconnect", (data) =>{
-        console.log(data.username + "disconnect")
-    })
+    
 
     const userSelect = (user) =>{
         setSelectedUser([

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState, useContext} from "react";
 import { socket } from "../../socket";
 import { CallDialog } from "./CallDialog";
 import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../Context";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 // JSS CSS START
 import { createUseStyles } from "react-jss"
@@ -22,7 +22,20 @@ const styles = {
         bottom: "2rem",
         left: "2rem",
         padding: "0.5rem 1rem",
-        cursor: "pointer"
+        cursor: "pointer",
+        borderRadius: 5
+    },
+    link:{
+        position: "absolute",
+        bottom: "2rem",
+        right: "3rem",
+        padding: "0.5rem 1rem",
+        cursor: "pointer",
+        backgroundColor: "#eee",
+        border: "2px solid black",
+        color: "black",
+        textDecoration: "none",
+        borderRadius: 5
     },
     request:{
         fontSize: "1.5rem",
@@ -48,8 +61,8 @@ export const Request = ({competitor}) =>{
     const [caller, setCaller] = useState(false)
     const [displayDialog, setDisplayDialog] = useState(false)
 
-    const [noUserJoin, setNoUserJoin] = useState(true)
     const [navigateToPlaypage, setNavigateToPlaypage] = useState(false)
+    const [timeRemainingToStartGame, setTimeRemainingToStartGame] = useState(10)
 
     // Context
     const {setAllCompetitors} = useContext(AllCompetitors)
@@ -86,7 +99,14 @@ export const Request = ({competitor}) =>{
                 "randomNumber": randomNumber
             }
         ])
-        setSendRequest(true)
+        setValidetedRequest(false)
+        setSendRequest(true) 
+
+        // Calculating the remaining time to start the game
+        const timeInterval = setInterval(() => {
+            setTimeRemainingToStartGame(prev => prev-1)
+        }, 1000);
+
         setTimeout(() => { 
             setSendRequest(false)  // Hide the show request... message on the screen
             if(joinnedCompetitors.length > 0){
@@ -94,25 +114,52 @@ export const Request = ({competitor}) =>{
                 setAllCompetitors(joinnedCompetitors)
                 joinnedCompetitors = []
                 setRoomId(socket.id)
-                setNavigateToPlaypage(true)
-                
+                setNavigateToPlaypage(true)  
             }
-
-            
-        }, 10000);
+            // I should clier interval
+            clearInterval(timeInterval)
+        }, 10000); 
     }
-    socket.on("call", (callerInfo) =>{
-        setDisplayDialog(true)
-        setCaller(callerInfo)
-        
+
+    // function to manage call behavior 
+    const callfn = () =>{
+        // Calculating the remaining time to start the game
+        let i = 10
+        const timeInterval = setInterval(() => {
+            setTimeRemainingToStartGame(i--)
+        }, 1000);
+
         setTimeout(() => {
+            // I should clier interval
+            clearInterval(timeInterval)
             // Close dialog
             setDisplayDialog(false)
         }, 10000);
+    }
+
+    useEffect(()=>{
+        socket.on("call", (callerInfo) =>{
+            setDisplayDialog(true)
+            setCaller(callerInfo)
+            callfn()
+            
+        })
+        
+        return()=>{
+            socket.off("call", (callerInfo) =>{
+                setDisplayDialog(true)
+                setCaller(callerInfo)
+                callfn()
+                
+            })
+        }
     })
+    
 
     socket.on("competitor_join", (competitor) =>{
         joinnedCompetitors.push(competitor)
+        setSendRequest(false)
+        setValidetedRequest(true)
     })
     // Receiving competitors from the server
     socket.on("sendBackCompetitors", (competitors) =>{
@@ -125,6 +172,11 @@ export const Request = ({competitor}) =>{
         setNavigateToPlaypage(true)
     })
 
+    const displayRemainingTime = () =>{
+        setValidetedRequest(true)
+    }
+    
+
     
 
 
@@ -135,17 +187,17 @@ export const Request = ({competitor}) =>{
             {sendRequest && <p className={classes.request}>Requesting ....</p>}
             {validetedRequest && 
                 <p className={classes.validRequest}>
-                    <span>Request has been validated</span> <br /> <br />
-                    <span>Game start in 5 sec</span>
+                    <span>Game start in {timeRemainingToStartGame} sec</span>
                 </p>
             }
 
-            <CallDialog displayDialog={displayDialog} caller={caller}/>
+            <CallDialog displayDialog={displayDialog} caller={caller} displayRemainingTime = {displayRemainingTime}/>
             
             <button className={classes.button} 
             id={desableBtn ? "desablebtn" : "enableBtn"} onClick={sendRequestFnc}>
                 Send Request
             </button>
+            <Link to="/start" className={classes.link} >Race Alone</Link>
             {navigateToPlaypage && <Navigate to="/start"/>}
             
             

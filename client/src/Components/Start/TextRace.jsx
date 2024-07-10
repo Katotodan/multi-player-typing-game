@@ -2,7 +2,7 @@ import React,{useEffect, useState, useRef, useContext} from "react";
 import data from "../../Components/Start/text.json"
 import { socket } from "../../socket";
 import { RoomId, AllCompetitors } from "../../Context";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 
 // JSS CSS START
@@ -39,8 +39,9 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
     const [inputText, setInputText] = useState("")
     const [text, setText] = useState("")
     const [splittedtext, setSplittedText] = useState(text.split(''))
+    const [navigateToRequest, setNavigateToRequest] = useState(false)
 
-    const {allCompetitors} = useContext(AllCompetitors)
+    const {allCompetitors, setAllCompetitors} = useContext(AllCompetitors)
     
     useEffect(() =>{
         if(randomTextIndex){
@@ -94,18 +95,26 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
             str.current.children[inputLength - 1].style.color = "red"
         }
     }
+    const leaveRace = () =>{
+        // Disconnect to the room
+        // socket.emit("leaveRoom", [roomId])
+        // Clear all competitors
+        setAllCompetitors([])
+        // Go back to the request page
+        setNavigateToRequest(true)
+    }
     return(
         <div className={classes.container}>
             <div className="text" ref={str}>{inData}</div>
             <input type="text" className={classes.input} 
             placeholder="Type here" value={inputText} onChange={handleChange}/>
 
-            {percentage === 100 ?
-             <Link to="/request" className={classes.link}>Back to start Game</Link> :
-             <button className={classes.link}>Leave the race</button>}
+            <button className={classes.link} onClick={leaveRace}> 
+                {percentage === 100 ? "Back to start Game" : "Leave the race"}
+            </button>
+            {navigateToRequest && <Navigate to="/request"/>}
             
         </div>  
     )
 }
 
-// Working on socket disconnection state
