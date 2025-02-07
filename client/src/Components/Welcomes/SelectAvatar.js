@@ -1,11 +1,13 @@
-import React, {useContext} from "react"
+import React, {useContext, useEffect} from "react"
 import { ImageUrlContext } from "../../Context"
 
 // JSS CSS START
 import { createUseStyles } from "react-jss"
 const styles = {
-    div:{
-        marginLeft: '3rem'
+    allImg:{
+        display: "flex",
+        flexWrap: "wrap"
+        // flexDirection: ""
     },
     imgContainer:{
         position: "relative",
@@ -20,10 +22,8 @@ const styles = {
     },
     selected:{
         position: "absolute",
-        top: 0,
+        bottom: 0,
         left: 0,
-        height: "100%",
-        with: "100%",
         backgroundColor: "#87CEEB",
         opacity: 0.4
     }
@@ -59,26 +59,25 @@ const avartarSrc = [
 export const SelectAvatar = () =>{
     const classes = useStyles()
     const {currentUserImg, setCurrentUserImg} = useContext(ImageUrlContext)
+    useEffect(()=>{setCurrentUserImg(null)}, [])
     const selectImg = (url)=>{
         setCurrentUserImg(url)
     }
-    
-    
+       
     const images = avartarSrc.map((element, index) =>{
         return(
-            <span className={classes.imgContainer}>
+            <div className={classes.imgContainer} key={index}>
                 <img src={element.url} key={index} 
                 className={classes.img} onClick={() => selectImg(element.url)} alt="Avatar img"/>
                 {currentUserImg === element.url && <span className={classes.selected}>✔</span>}
-                
-            </span>
+            </div>
             
         )
     })
     return (
         <div className={classes.div}>
             <h3>Select your Avatar</h3>
-            {images}
+            <div className={classes.allImg}>{images}</div>
         </div>
     )
 }

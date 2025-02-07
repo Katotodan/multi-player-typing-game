@@ -1,8 +1,8 @@
 import './App.css';
 import React, {useState} from 'react';
-import { Welcome } from './Pages/Welcome';
+import { Welcome } from './Pages/Wecome/Welcome';
 import { Start } from './Pages/Start';
-import { RequestUser } from './Pages/RequestUser';
+import { RequestUser } from './Pages/RequestPage/RequestUser';
 import {
   BrowserRouter,
   Link,

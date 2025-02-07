@@ -7,14 +7,15 @@ const styles = {
     label: {
         fontSize: "1.5rem",
         display: "block",
-        margin: "1rem 3rem"
+        margin: "1rem 0"
     },
     input: {
         width: "20rem",
         height: "2rem",
         padding: "0.25rem 0.5rem",
-        margin: "0 0 1rem 3rem",
-        borderRadius: 5
+        margin: "0 0 1rem 0",
+        borderRadius: 5,
+        border: "1px solid black"
     }
 }
 const useStyles = createUseStyles(styles)

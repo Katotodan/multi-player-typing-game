@@ -1,22 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
-import { Request } from "../Components/Welcomes/Request";
-import { SelectCompetitor } from "../Components/Welcomes/SelectCompetitor";
-import { Navbar } from "../Components/Navbar";
-import { UserNameContext, ImageUrlContext } from "../Context";
+
+import { Request } from "../../Components/Welcomes/Request";
+import { SelectCompetitor } from "../../Components/Welcomes/SelectCompetitor";
+import { Navbar } from "../../Components/Navbar/Navbar";
+import { UserNameContext, ImageUrlContext } from "../../Context";
 import { Navigate } from "react-router-dom";
-import { socket } from "../socket";
-// JSS CSS START
-import { createUseStyles } from "react-jss"
-const styles = {
-    div: {
-        display: "flex",
-        justifyContent: "space-between"
-    }
-}
-const useStyles = createUseStyles(styles)
+import styles from "./RequestUser.module.css"
 
 export const RequestUser = () =>{
-    const classes = useStyles()
+
     // Context
     const {currentUser} = useContext(UserNameContext)
     const {currentUserImg} = useContext(ImageUrlContext)
@@ -37,7 +29,7 @@ export const RequestUser = () =>{
     return(
         <>
             <Navbar username={currentUser} imgUrl={currentUserImg}/>
-            <div className={classes.div}>
+            <div className={styles.div}>
                 <SelectCompetitor selectedCompetitor = {selectedCompetitor}/>
                 <Request competitor = {competitor} />
             </div>

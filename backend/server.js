@@ -2,18 +2,19 @@ const express = require('express');
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const cors = require('cors')
+require("dotenv").config()
 
 // Importing process module for showing the warning 
 const process = require('process')
 
 const app = express();
 app.use(cors({
-  origin: "http://localhost:3000"
+  origin: process.env.FRONTEND_URL
 }))
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: process.env.FRONTEND_URL
   }
 }); 
       
@@ -56,7 +57,7 @@ io.on('connection', (socket) => {
   })
   socket.on("sendPercentage", ([formSocketId, percentage, roomId]) =>{
     io.to(roomId +" room").emit("receivePercentag", [formSocketId, percentage])
-  })    
+  })       
 
   socket.on('disconnect', () => {
     

@@ -1,0 +1,73 @@
+nav{
+    display: flex;
+    justify-content: space-between;
+    height: 5rem;
+    background-color: #87CEEB;
+    padding: 1rem 4rem;
+    color: white;
+    font-size: 1.2rem;
+    align-items: center;
+    position: relative !important;
+}
+ul{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 2rem;
+}
+img{
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+button{
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.menu{
+    display: none;
+}
+
+@media screen and (max-width: 750px) {
+    nav{
+        height: 4rem;
+        padding: 0.7rem 2rem;
+        font-size: 1.1rem;
+    }
+
+}
+@media screen and (max-width: 600px) {
+    nav{
+        width: 100vw;
+        max-height: auto;
+        overflow-x: clip;
+        /* overflow-x: hidden;*/
+        overflow-y: visible; 
+    }
+    .menu{
+        display: block;
+        padding: 0;
+        border: none;
+    }
+    ul{
+        min-height: calc(100vh - 4rem);
+        position: absolute;
+        top: 4rem;
+        background-color: #87CEEB;
+        width: 100%;
+        right: 0;
+        flex-direction: column;
+        transform: translateX(100%);
+        z-index: 2;
+        gap: 0.5rem; 
+        transition: transform 0.5s;
+    }
+    button.active + ul{
+        transform: translate(0%);
+        transition: transform 0.7s;
+    }
+} 
+
+/* Working on the navbar */

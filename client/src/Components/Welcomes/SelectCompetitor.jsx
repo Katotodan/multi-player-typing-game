@@ -45,7 +45,9 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
         axios.get("http://localhost:5000/getUser")
         .then((res) => setOnlineUser(res.data))
         .catch((err) => console.log("Error" + err))
-
+    }, [])
+    
+    useEffect(() =>{
         // Socket config
         socket.on("newUser", (data) =>{
             setOnlineUser([
@@ -69,7 +71,8 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
             })
         }
 
-    }, [])
+    })
+    
     
 
     useEffect(() =>{
@@ -104,8 +107,7 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
             <h3 className={classes.h3}>Online Users</h3>
             <input type="text" placeholder="Search for an user" className={classes.input}/>
             <section>
-                {onlineUser.length === 0 && <span>No user connected yet</span>}
-                {onlineUserList}
+                {onlineUser.length <= 1 ? <span>No user connected yet</span> : onlineUserList}
             </section>
 
         </section>
