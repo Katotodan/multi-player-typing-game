@@ -1,60 +1,12 @@
 import React, {useEffect, useRef, useState, useContext} from "react";
-import { socket } from "../../socket";
-import { CallDialog } from "./CallDialog";
-import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../Context";
+import { socket } from "../../../socket";
+import { CallDialog } from "../CallDialog";
+import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../../Context";
 import { Link, Navigate } from "react-router-dom";
+import styles from "./Request.module.css"
 
-// JSS CSS START
-import { createUseStyles } from "react-jss"
-const styles = {
-    container:{
-        width: "70%",
-        height: "75vh",
-        paddingTop: "3rem",
-        position: "relative"
-    },
-    h2:{
-        textAlign: "center",
-        marginBottom: "1.5rem"
-    },
-    button:{
-        position: "absolute",
-        bottom: "2rem",
-        left: "2rem",
-        padding: "0.5rem 1rem",
-        cursor: "pointer",
-        borderRadius: 5
-    },
-    link:{
-        position: "absolute",
-        bottom: "2rem",
-        right: "3rem",
-        padding: "0.5rem 1rem",
-        cursor: "pointer",
-        backgroundColor: "#eee",
-        border: "2px solid black",
-        color: "black",
-        textDecoration: "none",
-        borderRadius: 5
-    },
-    request:{
-        fontSize: "1.5rem",
-        marginTop: "4rem",
-        textAlign: "center"
-    },
-    validRequest:{
-        fontSize: "1.5rem",
-        textAlign: "center",
-        marginTop: "2rem"
-    }
-    
-   
-}
-
-const useStyles = createUseStyles(styles)
 
 export const Request = ({competitor}) =>{
-    const classes = useStyles()
     const [sendRequest, setSendRequest] = useState(false) // Show the requesting ... message on the screen
     const [validetedRequest, setValidetedRequest] = useState(false)
     const [desableBtn, setDesableBtn] = useState(true)
@@ -181,27 +133,27 @@ export const Request = ({competitor}) =>{
 
 
     return(
-        <div className={classes.container}>
-            <h2 className={classes.h2}>Select an online user in order to be able to play with </h2>
-            <h2 className={classes.h2}>Or wait for an other user to call you</h2>
-            {sendRequest && <p className={classes.request}>Requesting ....</p>}
+        <div className={styles.container}>
+            <h2 className={styles.title2}>Select an online user in order to be able to play with </h2>
+            <h3 className={styles.title2}>Or wait for an other user to call you</h3>
+            {sendRequest && <p className={styles.request}>Requesting ....</p>}
             {validetedRequest && 
-                <p className={classes.validRequest}>
+                <p className={styles.validRequest}>
                     <span>Game start in {timeRemainingToStartGame} sec</span>
                 </p>
             }
 
             <CallDialog displayDialog={displayDialog} caller={caller} displayRemainingTime = {displayRemainingTime}/>
+            <div className={styles.btnContainer}>
+                <button id={desableBtn ? "desablebtn" : "enableBtn"} 
+                onClick={sendRequestFnc}> Send Request</button>
+                <button>
+                    <Link to="/start" className={styles.link} >Race Alone</Link>
+                </button>
+                
+            </div>
             
-            <button className={classes.button} 
-            id={desableBtn ? "desablebtn" : "enableBtn"} onClick={sendRequestFnc}>
-                Send Request
-            </button>
-            <Link to="/start" className={classes.link} >Race Alone</Link>
-            {navigateToPlaypage && <Navigate to="/start"/>}
-            
-            
+            {navigateToPlaypage && <Navigate to="/start"/>} 
         </div>
     )
-}
-
+} 

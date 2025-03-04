@@ -39,41 +39,33 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
     const classes = useStyles()
     const [onlineUser, setOnlineUser] = useState([])
     const [selectedUser, setSelectedUser] = useState([])
-    
+    const [onlineUserList, setOnlineUserList] = useState([])
+
     useEffect(() =>{
         // Get online user from the server
         axios.get("http://localhost:5000/getUser")
-        .then((res) => setOnlineUser(res.data))
+        .then((res) => {            
+            setOnlineUser(res.data)
+        })
         .catch((err) => console.log("Error" + err))
     }, [])
-    
+
     useEffect(() =>{
         // Socket config
-        socket.on("newUser", (data) =>{
-            setOnlineUser([
-                ...onlineUser,
-                data
-            ])
+        socket.on("newUser", (data) =>{   
+            setOnlineUser((prev) => [...prev, data])
+         
         })
-
         socket.on("userDisconnect", (users) =>{
-            console.log(users)
-            setOnlineUser(users)
+            setOnlineUser([])
         })
-
         return () =>{
-            socket.off("userDisconnect", (users) =>{setOnlineUser(users) })
+            socket.off("userDisconnect", (users) =>{setOnlineUser([]) })
             socket.off("newUser", (data) =>{
-                setOnlineUser([
-                    ...onlineUser,
-                    data
-                ])
+                setOnlineUser([])
             })
         }
-
-    })
-    
-    
+    }, [])
 
     useEffect(() =>{
         selectedCompetitor(selectedUser)
@@ -91,25 +83,28 @@ export const SelectCompetitor = ({selectedCompetitor}) =>{
         const filteredUser = selectedUser.filter(id => id !== socketId)
         setSelectedUser(filteredUser)
     }
+    
 
     
-    const onlineUserList = onlineUser.map((element, index) =>{
-            if(element.socketId !== socket.id){
+    useEffect(()=>{
+        setOnlineUserList(onlineUser.map((element,index) =>{
+            if(element.socketId !== socket.id){                
                 return( 
                 <OnlineCompetitor element={element} index={index} 
-                selected={userSelect} unselectUser={unselectUser}/> 
+                selected={userSelect} unselectUser={unselectUser} key={element.socketId}/> 
                 ) 
-            } 
-            return(<></>)    
-    })
+            }
+        }))         
+    }, [onlineUser])
+
+    
     return(
         <section className={classes.section}>
             <h3 className={classes.h3}>Online Users</h3>
             <input type="text" placeholder="Search for an user" className={classes.input}/>
-            <section>
-                {onlineUser.length <= 1 ? <span>No user connected yet</span> : onlineUserList}
-            </section>
-
+            <div>
+                {onlineUser.length > 1 ? onlineUserList : <span>No user connected yet</span>}
+            </div>
         </section>
     )
 }

@@ -21,8 +21,14 @@ export const Welcome = () =>{
             socket.emit("addUser" , {
                 "username": currentUser,
                 "userImg" : currentUserImg
-            }) 
-            setDisplayOnlineUsers(true)    
+            }, (response) => {
+                if (response.status === "ok") {
+                    setDisplayOnlineUsers(true) 
+                } else {
+                  console.error("Error from server:", response);
+                }
+              })
+               
         }else{
             setDisplayMessage(true)
             setTimeout(() => {

@@ -1,0 +1,33 @@
+.container{
+    width: 70%;
+    height: 75vh;
+    padding-top: 3rem;
+    position: relative
+}
+.title2{
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.link{
+    color: black;
+    text-decoration: none;
+}
+ .btnContainer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.5rem;
+ }
+.request{
+    font-size: 1.5rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+.validRequest{
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 2rem;
+}

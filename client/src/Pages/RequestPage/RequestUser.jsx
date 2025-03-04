@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 
-import { Request } from "../../Components/Welcomes/Request";
+import { Request } from "../../Components/Welcomes/Request/Request";
 import { SelectCompetitor } from "../../Components/Welcomes/SelectCompetitor";
 import { Navbar } from "../../Components/Navbar/Navbar";
 import { UserNameContext, ImageUrlContext } from "../../Context";

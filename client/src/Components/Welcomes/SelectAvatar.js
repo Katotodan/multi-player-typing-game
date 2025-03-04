@@ -54,7 +54,7 @@ const avartarSrc = [
     {
         url: "https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png",
     }
-]
+] 
 
 export const SelectAvatar = () =>{
     const classes = useStyles()

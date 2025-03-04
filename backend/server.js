@@ -22,17 +22,22 @@ let onlineUser = []
  
 
 io.on('connection', (socket) => {
-  socket.on("addUser", (data) =>{
+  socket.on("addUser", (data, callback) =>{
     onlineUser.push({
       "socketId": socket.id,
       "username": data.username,      
       "url": data.userImg
     })
+    // Respond with acknowledgment
+    callback({ status: "ok"})
+
     socket.broadcast.emit("newUser", {
       "socketId": socket.id,
       "username": data.username,
       "url": data.userImg
     })
+    
+    
   })
 
   socket.on("request", ([competitors, senderInfo]) =>{
