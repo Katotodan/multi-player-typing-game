@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState, useContext} from "react";
 import { socket } from "../../../socket";
-import { CallDialog } from "../CallDialog";
+import { CallDialog } from "../CallDialog/CallDialog";
 import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../../Context";
 import { Link, Navigate } from "react-router-dom";
-import styles from "./Request.module.css"
+import "./request.css"
 
 
-export const Request = ({competitor}) =>{
+export const Request = ({competitor, display}) =>{
     const [sendRequest, setSendRequest] = useState(false) // Show the requesting ... message on the screen
     const [validetedRequest, setValidetedRequest] = useState(false)
     const [desableBtn, setDesableBtn] = useState(true)
@@ -133,26 +133,16 @@ export const Request = ({competitor}) =>{
 
 
     return(
-        <div className={styles.container}>
-            <h2 className={styles.title2}>Select an online user in order to be able to play with </h2>
-            <h3 className={styles.title2}>Or wait for an other user to call you</h3>
-            {sendRequest && <p className={styles.request}>Requesting ....</p>}
+        <div className={display ? "request-container" : "request-container non-active" }>
+            <h2 className="title2">Select an online user in order to be able to play with </h2>
+            <h3 className="title2">Or wait for an other user to call you</h3>
+            {sendRequest && <p className="request">Requesting ....</p>}
             {validetedRequest && 
-                <p className={styles.validRequest}>
+                <p className="validRequest">
                     <span>Game start in {timeRemainingToStartGame} sec</span>
                 </p>
             }
-
             <CallDialog displayDialog={displayDialog} caller={caller} displayRemainingTime = {displayRemainingTime}/>
-            <div className={styles.btnContainer}>
-                <button id={desableBtn ? "desablebtn" : "enableBtn"} 
-                onClick={sendRequestFnc}> Send Request</button>
-                <button>
-                    <Link to="/start" className={styles.link} >Race Alone</Link>
-                </button>
-                
-            </div>
-            
             {navigateToPlaypage && <Navigate to="/start"/>} 
         </div>
     )

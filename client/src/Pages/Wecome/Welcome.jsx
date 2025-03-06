@@ -4,7 +4,7 @@ import { UserInfo } from "../../Components/Welcomes/UserInfo";
 import { Navigate } from "react-router-dom";
 import { UserNameContext, ImageUrlContext } from "../../Context";
 import { socket } from "../../socket";
-import styles from "./Welcome.module.css"
+import "./welcome.css"
 
 
 export const Welcome = () =>{
@@ -38,13 +38,13 @@ export const Welcome = () =>{
     }
 
     return(
-        <div className={styles.container}>
+        <div className="welcome-container">
             <h2>Welcome to Arcadia typing game</h2>
             <p>In a world where typing speed is power...</p>
             <UserInfo/>
             <SelectAvatar/>
-            <div className={styles.msgContainer}>
-                {displayMessage && <p className={styles.msg}>Add username and select your avatar please!!!</p>}
+            <div className="msgContainer">
+                {displayMessage && <p className="msg">Add username and select your avatar please!!!</p>}
             </div>
             <button type="button" onClick={goOnline}>See online combetitors</button>
             {displayOnlineUsers && <Navigate to="/request"/>}   

@@ -1,15 +1,15 @@
-.container{
+.welcome-container{
     min-height: 100vh;
     width: 100vw;
     overflow: hidden;
     background-color: bisque;
     padding: 0.5rem 2rem;
 }
-h2{
+.welcome-container h2{
     text-align: center;
     margin: 1rem 0;
 }
-p{
+.welcome-container p{
     text-align: center;
     margin: 1rem 0;
     font-size: 1.5rem;
@@ -21,21 +21,21 @@ button{
     cursor: pointer;
 
 }
-.msgContainer{
+.welcome-container .msgContainer{
     height: 2rem;
     width: 100%;
 }
-.msg{
+.welcome-container .msg{
     color: red;
 }
 @media screen and (max-width: 600px) {
-    .container{
+    .welcome-container{
         padding: 0.25rem 1rem;
     }
     button{
         margin: 1rem 0;
     }
-    .msgContainer{
+    .welcome-container .msgContainer{
         height: 5rem;
     }
 }

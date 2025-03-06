@@ -5,29 +5,24 @@ import styles from "./Navbar.module.css"
 import { Menu } from 'lucide-react';
 
 export const Navbar = ({username, imgUrl}) => {
-    const [navToHome, setNavToHome] = useState(false)
-    const menu = useRef(null)
-    const [menuActive, setMenuActive] = useState(false)
-
-    // useEffect(()=>{
-    //     menu.current.addEventListener("blur", () => setMenuActive(false))
-    // }, [])
+    const [navigateToHome, setNavigateToHome] = useState(false)
+    const [isActive, setIsActive] = useState(false);
 
     const disconnect = ()=>{
         socket.disconnect()
         // Navigate to home
-        setNavToHome(true)
+        setNavigateToHome(true)
 
     }
-    const showDropDown = ()=> setMenuActive(!menuActive)
+    const showDropDown = ()=> setIsActive((prev) => !prev)
     
     return(
         <nav>
-            {navToHome && <Navigate to="/"/>}
-            <div className="logo"><h2>Typing game</h2></div>
-            <button className={`${styles.menu} ${menuActive ? styles.active : ""}`} onClick={showDropDown} ref={menu}><Menu/></button>
+            {navigateToHome && <Navigate to="/"/>}
+            <div className={styles.logo}><h2>Typing game</h2></div>
+            <button onClick={showDropDown} className={styles.menu}><Menu/></button>
             
-            <ul>
+            <ul className={isActive ? styles.active : ""}>
                 <button onClick={disconnect}>Disconnect</button>
                 <li>{username}</li>
                 <li><img src={imgUrl} alt="Avatar image"/></li>

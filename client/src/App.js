@@ -2,7 +2,7 @@ import './App.css';
 import React, {useState} from 'react';
 import { Welcome } from './Pages/Wecome/Welcome';
 import { Start } from './Pages/Start';
-import { RequestUser } from './Pages/RequestPage/RequestUser';
+import { RequestUserPage } from './Pages/RequestPage/RequestUserPage';
 import {
   BrowserRouter,
   Link,
@@ -55,7 +55,7 @@ function App() {
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Welcome/>} />
-                  <Route path="/request" element={<RequestUser/>} />
+                  <Route path="/request" element={<RequestUserPage/>} />
                   <Route path="/start" element={<Start/>} />
                 </Routes>
               </BrowserRouter>
