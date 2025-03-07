@@ -1,0 +1,21 @@
+.link{
+    color: black;
+    text-decoration: none;
+}
+.send-request{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #eee;
+    padding: 0 0.5rem;
+    height: 3rem;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .send-request{
+        padding: 0 1rem;
+    }
+}

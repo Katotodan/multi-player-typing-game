@@ -1,7 +1,7 @@
-.request-container{
+.welcome-request-container{
     width: 100%;
     height: 100%;
-    padding: 3rem 0.5rem 0.25rem 0.5rem;
+    padding: 4rem 0.5rem 0.25rem 0.5rem;
     overflow-x: auto;
 }
 .non-active{
@@ -12,15 +12,6 @@
     margin-bottom: 1.5rem;
     
 }
- .btnContainer{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 0.5rem;
- }
 .request{
     font-size: 1.5rem;
     margin-top: 4rem;
@@ -30,5 +21,13 @@
     font-size: 1.5rem;
     text-align: center;
     margin-top: 2rem;
+}
+@media (min-width: 768px) {
+    .non-active{
+        display: block;
+    }
+    .welcome-request-container{
+        padding: 3rem 0.5rem 0.25rem 0.5rem;
+    }
 }
 

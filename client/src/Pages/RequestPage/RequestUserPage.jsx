@@ -7,6 +7,7 @@ import { UserNameContext, ImageUrlContext } from "../../Context";
 import { Navigate, Link } from "react-router-dom";
 import "./RequestUserPage.css"
 import { Search, X } from "lucide-react";
+import { SendRequest } from "../../Components/Welcomes/SendRequest/SendRequest";
 
 
 export const RequestUserPage = () =>{
@@ -19,6 +20,7 @@ export const RequestUserPage = () =>{
 
     const [showOnlineUser, setShowOnlineUser] = useState(false)
     const [showWelcomingMsg, setShowWelcomingMsg] = useState(true)
+    const [isRequestSent, setIsRequestSent] = useState(false)
 
 
     // Checking if username exist
@@ -26,6 +28,7 @@ export const RequestUserPage = () =>{
         if(!currentUser || !currentUserImg){
             setNavigateUser(true)
         }
+        setIsRequestSent(false)
     }, [])
 
     const selectedCompetitor = (competitors) =>{
@@ -34,6 +37,11 @@ export const RequestUserPage = () =>{
     const toggleOnlineUser = ()=>{
         setShowOnlineUser(prev => !prev)
         setShowWelcomingMsg(prev => !prev)
+    }
+    const sendRequestFnc = () =>{
+        toggleOnlineUser()
+        setIsRequestSent(true)
+
     }
 
     return(
@@ -46,16 +54,9 @@ export const RequestUserPage = () =>{
             <div className="request-page-main-container">
                 <div className="request-container">
                     <SelectCompetitor selectedCompetitor = {selectedCompetitor} display={showOnlineUser}/>
-                    <Request competitor = {competitor} display={showWelcomingMsg}/>
+                    <Request competitor = {competitor} display={showWelcomingMsg} isRequestSent={isRequestSent}/>
                 </div>
-                <div className="send-request">
-                    <button id={competitor ? "desablebtn" : "enableBtn"} 
-                    // onClick={sendRequestFnc}
-                    > Send Request</button>
-                    <button>
-                        <Link to="/start" className="link" >Race Alone</Link>
-                    </button> 
-                </div>
+                <SendRequest competitor={competitor} sendRequestFnc={sendRequestFnc}/>
             </div>
             
             {navigateUser && <Navigate to="/"/>}
@@ -63,4 +64,3 @@ export const RequestUserPage = () =>{
         
     )
 }
-// Working on sending request and then working on large screen responsiveness

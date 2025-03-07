@@ -11,7 +11,7 @@ import { socket } from "../../socket";
 import { createUseStyles } from "react-jss"
 const styles = {
     div:{
-        padding: "0.5rem",
+        padding: "0.5rem 2rem",
         marginTop: "1rem"
     }
 }

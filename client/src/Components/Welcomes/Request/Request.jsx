@@ -6,7 +6,7 @@ import { Link, Navigate } from "react-router-dom";
 import "./request.css"
 
 
-export const Request = ({competitor, display}) =>{
+export const Request = ({competitor, display, isRequestSent}) =>{
     const [sendRequest, setSendRequest] = useState(false) // Show the requesting ... message on the screen
     const [validetedRequest, setValidetedRequest] = useState(false)
     const [desableBtn, setDesableBtn] = useState(true)
@@ -24,18 +24,6 @@ export const Request = ({competitor, display}) =>{
     const {setRandomTextIndex} = useContext(RandomTextIndexContext)
 
     let joinnedCompetitors = [] // Array of joinned competitors
-
-    useEffect(() =>{
-        // If a competitor has been selected, it will enable the request button
-        if(competitor.length === 0){
-            // Desable button
-            setDesableBtn(true)
-
-        }else{
-            // enable button
-            setDesableBtn(false)
-        }
-    }, [competitor])
 
     const sendRequestFnc = () =>{
         // Get random number for indexing the text to be displayed while playing
@@ -72,6 +60,9 @@ export const Request = ({competitor, display}) =>{
             clearInterval(timeInterval)
         }, 10000); 
     }
+    useEffect(() => {
+        if(isRequestSent) sendRequestFnc()
+    }, [isRequestSent])
 
     // function to manage call behavior 
     const callfn = () =>{
@@ -88,26 +79,13 @@ export const Request = ({competitor, display}) =>{
             setDisplayDialog(false)
         }, 10000);
     }
-
-    useEffect(()=>{
-        socket.on("call", (callerInfo) =>{
-            setDisplayDialog(true)
-            setCaller(callerInfo)
-            callfn()
-            
-        })
-        
-        return()=>{
-            socket.off("call", (callerInfo) =>{
-                setDisplayDialog(true)
-                setCaller(callerInfo)
-                callfn()
-                
-            })
-        }
-    })
     
-
+    socket.on("call", (callerInfo) =>{
+        setDisplayDialog(true)
+        setCaller(callerInfo)
+        callfn()
+        
+    })
     socket.on("competitor_join", (competitor) =>{
         joinnedCompetitors.push(competitor)
         setSendRequest(false)
@@ -129,11 +107,8 @@ export const Request = ({competitor, display}) =>{
     }
     
 
-    
-
-
     return(
-        <div className={display ? "request-container" : "request-container non-active" }>
+        <div className={display ? "welcome-request-container" : "welcome-request-container non-active" }>
             <h2 className="title2">Select an online user in order to be able to play with </h2>
             <h3 className="title2">Or wait for an other user to call you</h3>
             {sendRequest && <p className="request">Requesting ....</p>}
