@@ -1,8 +1,5 @@
 import React,{useState, useContext} from "react";
 import { SingleRace } from "./SingleRace";
-import car1 from "../../Assets/car1.png"
-import car2 from "../../Assets/car2.png"
-import car3 from "../../Assets/car3.png"
 import { AllCompetitors, ImageUrlContext } from "../../Context";
 import { socket } from "../../socket";
 
@@ -25,7 +22,7 @@ export const Race = ({percentage}) =>{
     const classes = useStyles()
 
     // Receiving the percentage of every user
-    socket.on("receivePercentag", ([formSocketId, percentage]) =>{
+    socket.on("receivePercentage", ([formSocketId, percentage]) =>{
         const newCompetitorsInfo = allCompetitors.map(element =>{
             if(element.socketId !== formSocketId){
                 return element
@@ -40,7 +37,6 @@ export const Race = ({percentage}) =>{
         })
         setAllCompetitors(newCompetitorsInfo)
     })
-
     const competitors = allCompetitors.map((element, index) =>{
         return(
             <SingleRace image={element.callerImg} percentage={element.position} 
@@ -54,3 +50,5 @@ export const Race = ({percentage}) =>{
         </div>
     )
 } 
+
+// Try to figure it out why competitors are not comming all

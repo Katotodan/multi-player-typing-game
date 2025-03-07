@@ -26,7 +26,7 @@ function App() {
         currentUser,
         setCurrentUser
       }}
-    >
+    > 
       <ImageUrlContext.Provider
         value={{
           currentUserImg,

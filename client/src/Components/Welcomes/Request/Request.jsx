@@ -2,14 +2,13 @@ import React, {useEffect, useRef, useState, useContext} from "react";
 import { socket } from "../../../socket";
 import { CallDialog } from "../CallDialog/CallDialog";
 import { AllCompetitors, UserNameContext, ImageUrlContext, RoomId, RandomTextIndexContext } from "../../../Context";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "./request.css"
 
 
-export const Request = ({competitor, display, isRequestSent}) =>{
+export const Request = ({competitor, display, isRequestSent, displayWecomingMsg}) =>{
     const [sendRequest, setSendRequest] = useState(false) // Show the requesting ... message on the screen
     const [validetedRequest, setValidetedRequest] = useState(false)
-    const [desableBtn, setDesableBtn] = useState(true)
     const [caller, setCaller] = useState(false)
     const [displayDialog, setDisplayDialog] = useState(false)
 
@@ -50,7 +49,14 @@ export const Request = ({competitor, display, isRequestSent}) =>{
         setTimeout(() => { 
             setSendRequest(false)  // Hide the show request... message on the screen
             if(joinnedCompetitors.length > 0){
-                socket.emit("sendCompetitor", joinnedCompetitors)
+                const allCompetitors = [
+                    ...joinnedCompetitors, {
+                    "socketId":socket.id, 
+                    "callerName": currentUser, 
+                    "callerImg":currentUserImg, 
+                    "position": 0}
+                ]
+                socket.emit("sendCompetitor", allCompetitors)
                 setAllCompetitors(joinnedCompetitors)
                 joinnedCompetitors = []
                 setRoomId(socket.id)
@@ -67,6 +73,7 @@ export const Request = ({competitor, display, isRequestSent}) =>{
     // function to manage call behavior 
     const callfn = () =>{
         // Calculating the remaining time to start the game
+        displayWecomingMsg()
         let i = 10
         const timeInterval = setInterval(() => {
             setTimeRemainingToStartGame(i--)
@@ -80,27 +87,42 @@ export const Request = ({competitor, display, isRequestSent}) =>{
         }, 10000);
     }
     
-    socket.on("call", (callerInfo) =>{
-        setDisplayDialog(true)
-        setCaller(callerInfo)
-        callfn()
-        
-    })
-    socket.on("competitor_join", (competitor) =>{
-        joinnedCompetitors.push(competitor)
-        setSendRequest(false)
-        setValidetedRequest(true)
-    })
-    // Receiving competitors from the server
-    socket.on("sendBackCompetitors", (competitors) =>{
-        // Filtering competitors to exclude you
-        let competitor = competitors.filter(element => socket.id !== element.socketId)
-        competitor.push(caller)
-        setAllCompetitors(competitor)
+    
+   
+    
 
-        // Navigate to start playing
-        setNavigateToPlaypage(true)
-    })
+    // useEffect(()=>{
+        const onCall = (callerInfo) =>{
+            // Should always display the welcoming message on mobile phone            
+            setDisplayDialog(true)
+            setCaller(callerInfo)
+            callfn()
+        }
+        const onCompetitorJoin = (competitor) =>{            
+            joinnedCompetitors.push(competitor)
+            setSendRequest(false)
+            setValidetedRequest(true)
+        }
+        const onSendBackCompetitors = (competitors) =>{   
+            // Filtering competitors to exclude you
+            const currentCompetitor = competitors.filter(element => socket.id !== element.socketId)
+            console.log(currentCompetitor);            
+            setAllCompetitors(currentCompetitor) 
+            // Navigate to start playing
+            setNavigateToPlaypage(true)
+        }
+        socket.on("call", onCall)
+        socket.on("competitor_join", onCompetitorJoin)
+        // Receiving competitors from the server
+        socket.on("sendBackCompetitors", onSendBackCompetitors)
+
+    //     return () =>{
+    //         socket.off("call", onCall)
+    //         socket.off("competitor_join", onCompetitorJoin)
+    //         // Receiving competitors from the server
+    //         socket.off("sendBackCompetitors", onSendBackCompetitors)  
+    //     }
+    // }, [])
 
     const displayRemainingTime = () =>{
         setValidetedRequest(true)

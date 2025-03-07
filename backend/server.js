@@ -54,14 +54,14 @@ io.on('connection', (socket) => {
     socket.join(callerId + " room")
   })   
   
-  socket.on("sendCompetitor", (competitors) =>{
+  socket.on("sendCompetitor", (competitors) =>{    
     for(let competitor of competitors){
       socket.to(competitor.socketId).emit("sendBackCompetitors", competitors)
 
     } 
   })
   socket.on("sendPercentage", ([formSocketId, percentage, roomId]) =>{
-    io.to(roomId +" room").emit("receivePercentag", [formSocketId, percentage])
+    io.to(roomId +" room").emit("receivePercentage", [formSocketId, percentage])
   })       
 
   socket.on('disconnect', () => {

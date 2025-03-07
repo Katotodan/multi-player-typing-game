@@ -43,6 +43,10 @@ export const RequestUserPage = () =>{
         setIsRequestSent(true)
 
     }
+    const displayWecomingMsg = () =>{
+        setShowOnlineUser(false)
+        setShowWelcomingMsg(true)
+    }
 
     return(
         <>
@@ -54,7 +58,8 @@ export const RequestUserPage = () =>{
             <div className="request-page-main-container">
                 <div className="request-container">
                     <SelectCompetitor selectedCompetitor = {selectedCompetitor} display={showOnlineUser}/>
-                    <Request competitor = {competitor} display={showWelcomingMsg} isRequestSent={isRequestSent}/>
+                    <Request competitor = {competitor} 
+                    display={showWelcomingMsg} isRequestSent={isRequestSent} displayWecomingMsg ={displayWecomingMsg}/>
                 </div>
                 <SendRequest competitor={competitor} sendRequestFnc={sendRequestFnc}/>
             </div>
