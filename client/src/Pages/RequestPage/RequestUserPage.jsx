@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { Request } from "../../Components/Welcomes/Request/Request";
 import { SelectCompetitor } from "../../Components/Welcomes/SelectCompetitor/SelectCompetitor";
 import { Navbar } from "../../Components/Navbar/Navbar";
-import { UserNameContext, ImageUrlContext } from "../../Context";
+import { UserNameContext, ImageUrlContext, AllCompetitors } from "../../Context";
 import { Navigate, Link } from "react-router-dom";
 import "./RequestUserPage.css"
 import { Search, X } from "lucide-react";
@@ -16,6 +16,7 @@ export const RequestUserPage = () =>{
     const {currentUser} = useContext(UserNameContext)
     const {currentUserImg} = useContext(ImageUrlContext)
     const [competitor, setCompetitor] = useState([])
+    const {setAllCompetitors} = useContext(AllCompetitors)
     const [navigateUser, setNavigateUser] = useState(false)
 
     const [showOnlineUser, setShowOnlineUser] = useState(false)
@@ -29,6 +30,7 @@ export const RequestUserPage = () =>{
             setNavigateUser(true)
         }
         setIsRequestSent(false)
+        setAllCompetitors([])
     }, [])
 
     const selectedCompetitor = (competitors) =>{

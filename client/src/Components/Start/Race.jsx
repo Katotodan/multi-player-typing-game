@@ -50,5 +50,5 @@ export const Race = ({percentage}) =>{
         </div>
     )
 } 
-
+ 
 // Try to figure it out why competitors are not comming all

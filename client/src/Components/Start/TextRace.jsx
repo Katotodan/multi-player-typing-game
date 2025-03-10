@@ -96,8 +96,6 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
         }
     }
     const leaveRace = () =>{
-        // Disconnect to the room
-        // socket.emit("leaveRoom", [roomId])
         // Clear all competitors
         setAllCompetitors([])
         // Go back to the request page
