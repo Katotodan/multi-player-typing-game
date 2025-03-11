@@ -61,16 +61,21 @@ export const SelectAvatar = () =>{
     const {currentUserImg, setCurrentUserImg} = useContext(ImageUrlContext)
     useEffect(()=>{setCurrentUserImg(null)}, [])
     const selectImg = (url)=>{
-        setCurrentUserImg(url)
+        if(currentUserImg !== url){
+            setCurrentUserImg(url)
+        }else{
+            setCurrentUserImg("")
+        }
+        
     }
        
     const images = avartarSrc.map((element, index) =>{
         return(
-            <div className={classes.imgContainer} key={index}>
+            <button className={classes.imgContainer} key={index} onClick={() => selectImg(element.url)}>
                 <img src={element.url} key={index} 
-                className={classes.img} onClick={() => selectImg(element.url)} alt="Avatar img"/>
+                className={classes.img} alt="Avatar img"/>
                 {currentUserImg === element.url && <span className={classes.selected}>✔</span>}
-            </div>
+            </button>
             
         )
     })

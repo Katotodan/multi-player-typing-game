@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 import "./request.css"
 
 
-export const Request = ({competitor, display, isRequestSent, displayWecomingMsg}) =>{
+export const Request = ({competitor, display, isRequestSent, displayWecomingMsg, noCompetitorResponded}) =>{
     const [sendRequest, setSendRequest] = useState(false) // Show the requesting ... message on the screen
     const [validetedRequest, setValidetedRequest] = useState(false)
     const [caller, setCaller] = useState(false)
@@ -21,8 +21,36 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg}
     const {currentUserImg} = useContext(ImageUrlContext)
     const {setRoomId} = useContext(RoomId)
     const {setRandomTextIndex} = useContext(RandomTextIndexContext)
+    const joinedCompetitors = useRef([])
 
-    let joinnedCompetitors = [] // Array of joinned competitors
+    useEffect(() =>{
+        const onCall = (callerInfo) =>{
+            // Should always display the welcoming message on mobile phone            
+            setDisplayDialog(true)
+            setCaller(callerInfo)            
+        }
+        const onCompetitorJoin = (joinCompetitor) =>{  
+            joinedCompetitors.current = [...joinedCompetitors.current ,joinCompetitor]             
+            setSendRequest(false)
+            setValidetedRequest(true)
+            callfn()
+        }
+        const onSendBackCompetitors = (joinCompetitors) =>{   
+            // Filtering competitors to exclude you
+            const currentCompetitor = joinCompetitors.filter(element => socket.id !== element.socketId)
+            console.log("Competitor back", currentCompetitor);            
+            setAllCompetitors(currentCompetitor) 
+        }
+        
+        socket.on("call", onCall)
+        socket.on("competitor_join", onCompetitorJoin)
+        socket.on("sendBackCompetitors", onSendBackCompetitors)
+
+        return () =>{
+            socket.off("call", onCall)
+            socket.off("competitor_join", onCompetitorJoin)
+        }
+    }, [])
 
     const sendRequestFnc = () =>{
         // Get random number for indexing the text to be displayed while playing
@@ -39,93 +67,58 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg}
             }
         ])
         setValidetedRequest(false)
-        setSendRequest(true) 
-
-        // Calculating the remaining time to start the game
-        const timeInterval = setInterval(() => {
-            setTimeRemainingToStartGame(prev => prev-1)
-        }, 1000);
+        setSendRequest(true)
+        setAllCompetitors([]) 
 
         setTimeout(() => { 
             setSendRequest(false)  // Hide the show request... message on the screen
-            if(joinnedCompetitors.length > 0){
+            if(joinedCompetitors.current.length > 0){
                 const allCompetitors = [
-                    ...joinnedCompetitors, {
+                    ...joinedCompetitors.current, {
                     "socketId":socket.id, 
                     "callerName": currentUser, 
                     "callerImg":currentUserImg, 
                     "position": 0}
                 ]
                 socket.emit("sendCompetitor", allCompetitors)
-                setAllCompetitors(joinnedCompetitors)
-                joinnedCompetitors = []
+                setAllCompetitors(joinedCompetitors.current)
+                joinedCompetitors.current = []
                 setRoomId(socket.id)
-                setNavigateToPlaypage(true)  
+            }else{
+                // Enable to send another request
+                noCompetitorResponded(false)
             }
-            // I should clier interval
-            clearInterval(timeInterval)
+            
         }, 10000); 
     }
     useEffect(() => {
         if(isRequestSent) sendRequestFnc()
     }, [isRequestSent])
 
-    // function to manage call behavior 
+    // function to display the remaining time before game start 
     const callfn = () =>{
         // Calculating the remaining time to start the game
         displayWecomingMsg()
         let i = 10
         const timeInterval = setInterval(() => {
-            setTimeRemainingToStartGame(i--)
+            i -= 1
+            setTimeRemainingToStartGame(i)
         }, 1000);
 
         setTimeout(() => {
             // I should clier interval
             clearInterval(timeInterval)
+            i = 10
             // Close dialog
             setDisplayDialog(false)
+            setTimeRemainingToStartGame(10)
+            setNavigateToPlaypage(true)
         }, 10000);
     }
     
-    
-   
-    
-
-    // useEffect(()=>{
-        const onCall = (callerInfo) =>{
-            // Should always display the welcoming message on mobile phone            
-            setDisplayDialog(true)
-            setCaller(callerInfo)
-            callfn()
-        }
-        const onCompetitorJoin = (competitor) =>{            
-            joinnedCompetitors.push(competitor)
-            setSendRequest(false)
-            setValidetedRequest(true)
-        }
-        const onSendBackCompetitors = (competitors) =>{   
-            // Filtering competitors to exclude you
-            const currentCompetitor = competitors.filter(element => socket.id !== element.socketId)
-            console.log(currentCompetitor);            
-            setAllCompetitors(currentCompetitor) 
-            // Navigate to start playing
-            setNavigateToPlaypage(true)
-        }
-        socket.on("call", onCall)
-        socket.on("competitor_join", onCompetitorJoin)
-        // Receiving competitors from the server
-        socket.on("sendBackCompetitors", onSendBackCompetitors)
-
-    //     return () =>{
-    //         socket.off("call", onCall)
-    //         socket.off("competitor_join", onCompetitorJoin)
-    //         // Receiving competitors from the server
-    //         socket.off("sendBackCompetitors", onSendBackCompetitors)  
-    //     }
-    // }, [])
-
     const displayRemainingTime = () =>{
         setValidetedRequest(true)
+        callfn()
     }
     
 
@@ -143,4 +136,4 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg}
             {navigateToPlaypage && <Navigate to="/start"/>} 
         </div>
     )
-} 
+}

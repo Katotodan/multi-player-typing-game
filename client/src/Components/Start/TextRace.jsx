@@ -75,7 +75,6 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
                 occupiedPlace++
             }
         }
-        console.log(allCompetitors)
         alert("Game over, you have the " + occupiedPlace + "place")
     }
 
@@ -96,6 +95,8 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
         }
     }
     const leaveRace = () =>{
+        // Leave room        
+        socket.emit("leaveRoom", socket.id)
         // Clear all competitors
         setAllCompetitors([])
         // Go back to the request page

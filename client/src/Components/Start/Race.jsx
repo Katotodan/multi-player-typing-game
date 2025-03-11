@@ -1,4 +1,4 @@
-import React,{useState, useContext} from "react";
+import React,{useState, useContext, useEffect} from "react";
 import { SingleRace } from "./SingleRace";
 import { AllCompetitors, ImageUrlContext } from "../../Context";
 import { socket } from "../../socket";
@@ -22,21 +22,38 @@ export const Race = ({percentage}) =>{
     const classes = useStyles()
 
     // Receiving the percentage of every user
-    socket.on("receivePercentage", ([formSocketId, percentage]) =>{
-        const newCompetitorsInfo = allCompetitors.map(element =>{
-            if(element.socketId !== formSocketId){
-                return element
-            }else{
-                return(
-                    {"socketId":element.socketId, 
-                    "callerName": element.callerName, 
-                    "callerImg":element.callerImg, 
-                    "position": percentage
-                })
-            }
-        })
-        setAllCompetitors(newCompetitorsInfo)
+    useEffect(()=>{
+        const onReceivePercentage = ([formSocketId, percentage]) =>{
+            const newCompetitorsInfo = allCompetitors.map(element =>{
+                if(element.socketId !== formSocketId){
+                    return element
+                }else{
+                    return(
+                        {"socketId":element.socketId, 
+                        "callerName": element.callerName, 
+                        "callerImg":element.callerImg, 
+                        "position": percentage
+                    })
+                }
+            })
+            setAllCompetitors(newCompetitorsInfo)
+        }
+
+        const onSendBackCompetitors = (joinCompetitors) =>{   
+            // Filtering competitors to exclude you
+            const currentCompetitor = joinCompetitors.filter(element => socket.id !== element.socketId)
+            console.log("Competitor back", currentCompetitor);            
+            setAllCompetitors(currentCompetitor) 
+        }
+
+        socket.on("receivePercentage", onReceivePercentage)
+        socket.on("sendBackCompetitors", onSendBackCompetitors)
+        return () => {
+            socket.off("receivePercentage", onReceivePercentage)
+        }
     })
+
+    
     const competitors = allCompetitors.map((element, index) =>{
         return(
             <SingleRace image={element.callerImg} percentage={element.position} 

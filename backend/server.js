@@ -64,6 +64,14 @@ io.on('connection', (socket) => {
     io.to(roomId +" room").emit("receivePercentage", [formSocketId, percentage])
   })       
 
+  socket.on("leaveRoom", (socket_id) =>{
+    const roomSet = socket.rooms
+    for (const item of roomSet) {
+      if(item.includes("room")){
+        socket.leave(item);        
+      }
+    }
+  })
   socket.on('disconnect', () => {
     
     onlineUser = onlineUser.filter(user => user.socketId !== socket.id)
