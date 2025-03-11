@@ -94,6 +94,3 @@ server.listen(5000, () => {
 process.on('warning', (warning) => { 
   console.warn("warning stacktrace - " + warning.stack) 
 });
-
-// Next step, working on finishing the game and proposing to start the game again.
-

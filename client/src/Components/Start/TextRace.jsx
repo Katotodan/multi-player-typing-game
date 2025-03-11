@@ -105,11 +105,11 @@ export const RaceText = ({yourPercentage, randomTextIndex}) =>{
     return(
         <div className={classes.container}>
             <div className="text" ref={str}>{inData}</div>
-            <input type="text" className={classes.input} 
+            <input type="text" className={classes.input} autocomplete="autocomplete_off_randString"
             placeholder="Type here" value={inputText} onChange={handleChange}/>
 
-            <button className={classes.link} onClick={leaveRace}> 
-                {percentage === 100 ? "Back to start Game" : "Leave the race"}
+            <button className={classes.link} onClick={leaveRace}>
+                {percentage === 100 ? "Restart game" : "Leave the race"}
             </button>
             {navigateToRequest && <Navigate to="/request"/>}
             

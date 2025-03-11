@@ -27,7 +27,11 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg,
         const onCall = (callerInfo) =>{
             // Should always display the welcoming message on mobile phone            
             setDisplayDialog(true)
-            setCaller(callerInfo)            
+            setCaller(callerInfo)  
+            setTimeout(() => {
+                // Close dialog
+                setDisplayDialog(false)
+            }, 10000);        
         }
         const onCompetitorJoin = (joinCompetitor) =>{  
             joinedCompetitors.current = [...joinedCompetitors.current ,joinCompetitor]             
@@ -109,8 +113,6 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg,
             // I should clier interval
             clearInterval(timeInterval)
             i = 10
-            // Close dialog
-            setDisplayDialog(false)
             setTimeRemainingToStartGame(10)
             setNavigateToPlaypage(true)
         }, 10000);

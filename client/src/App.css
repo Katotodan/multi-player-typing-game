@@ -1,7 +1,8 @@
-#desablebtn{
-    cursor: not-allowed;
-}
-
-#enableBtn{
+button{
+    border: 1px solid #000;
+    padding: 0.5rem 1rem;
+    margin: 2rem 0;
+    border-radius: 5px;
     cursor: pointer;
+    outline: 0;
 }

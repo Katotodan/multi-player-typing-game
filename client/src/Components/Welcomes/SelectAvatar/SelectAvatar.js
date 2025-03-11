@@ -1,34 +1,8 @@
 import React, {useContext, useEffect} from "react"
-import { ImageUrlContext } from "../../Context"
+import { ImageUrlContext } from "../../../Context"
+import "./selectAvatar.css"
 
-// JSS CSS START
-import { createUseStyles } from "react-jss"
-const styles = {
-    allImg:{
-        display: "flex",
-        flexWrap: "wrap"
-        // flexDirection: ""
-    },
-    imgContainer:{
-        position: "relative",
-        cursor: "pointer"
-    },
-    img: {
-        with: "5rem",
-        height: "5rem",
-        objectFit: "cover",
-        marginRight: "1.5rem",
-        borderRadius: "50%"
-    },
-    selected:{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        backgroundColor: "#87CEEB",
-        opacity: 0.4
-    }
-}
-const useStyles = createUseStyles(styles)
+
 const avartarSrc = [
     {
         url: "https://www.premadegraphics.com/img_1/23/Female-Avatar-2.png",
@@ -57,7 +31,6 @@ const avartarSrc = [
 ] 
 
 export const SelectAvatar = () =>{
-    const classes = useStyles()
     const {currentUserImg, setCurrentUserImg} = useContext(ImageUrlContext)
     useEffect(()=>{setCurrentUserImg(null)}, [])
     const selectImg = (url)=>{
@@ -71,18 +44,18 @@ export const SelectAvatar = () =>{
        
     const images = avartarSrc.map((element, index) =>{
         return(
-            <button className={classes.imgContainer} key={index} onClick={() => selectImg(element.url)}>
+            <button className="avatart-btn" key={index} onClick={() => selectImg(element.url)}>
                 <img src={element.url} key={index} 
-                className={classes.img} alt="Avatar img"/>
-                {currentUserImg === element.url && <span className={classes.selected}>✔</span>}
+                className="avatar-img" alt="Avatar img"/>
+                {currentUserImg === element.url && <span className="selected">✔</span>}
             </button>
             
         )
     })
     return (
-        <div className={classes.div}>
+        <div className="avatar-container">
             <h3>Select your Avatar</h3>
-            <div className={classes.allImg}>{images}</div>
+            <div className="avatar-img-container">{images}</div>
         </div>
     )
 }

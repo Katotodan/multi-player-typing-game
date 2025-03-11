@@ -39,7 +39,7 @@ export const CallDialog = ({displayDialog, caller, displayRemainingTime}) =>{
     return(
         <dialog ref={dialogContainer}>
             <h2 className="title">{caller.callerName} is requesting for a race</h2>
-            <div className="btnContainer">
+            <div className="btn-container">
                 <button onClick={acceptCall} className="btn">Accept</button>
                 <button onClick={() => dialogContainer.current.close()} className="declineBtn">Decline</button>
             </div>

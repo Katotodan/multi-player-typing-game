@@ -6,27 +6,32 @@ dialog{
 }
 .title{
     text-align: center;
-    margin: 1rem 0 2rem 0;
+    margin: 1rem 0;
 }
-.btnContainer{
+.btn-container{
     display:flex;
-    padding: 0 3rem;
+    height: auto;
+    padding: 1rem;
     justify-content: space-between;
 }
 .btn{
     padding: 0.5rem 1rem;
-    background-color: #87CEEB;
     border-radius: 5px;
     cursor: pointer;
+    margin: 0 !important;
 }
 .declineBtn{
     padding: 0.5rem 1rem;
     background-color: #ff0000;
     border-radius: 5px;
     cursor: pointer;
+    margin: 0 !important;
 }
 @media (min-width: 768px) {
     .title{
         margin: 1rem 0 1rem 0;
+    }
+    dialog{
+        width: 50%;
     }
 }

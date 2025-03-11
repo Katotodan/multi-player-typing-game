@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
-import { SelectAvatar } from "../../Components/Welcomes/SelectAvatar";
-import { UserInfo } from "../../Components/Welcomes/UserInfo";
+import { SelectAvatar } from "../../Components/Welcomes/SelectAvatar/SelectAvatar";
+import { UserInfo } from "../../Components/Welcomes/UserInfo/UserInfo";
 import { Navigate } from "react-router-dom";
 import { UserNameContext, ImageUrlContext } from "../../Context";
 import { socket } from "../../socket";
@@ -46,7 +46,9 @@ export const Welcome = () =>{
             <div className="msgContainer">
                 {displayMessage && <p className="msg">Add username and select your avatar please!!!</p>}
             </div>
-            <button type="button" onClick={goOnline}>See online combetitors</button>
+            <button type="button" onClick={goOnline} className="goOnline-btn">
+                See online combetitors
+            </button>
             {displayOnlineUsers && <Navigate to="/request"/>}   
         </div>
     )
