@@ -6,7 +6,6 @@ export const SingleOnlineCompetitor = ({element, selected, unselectUser}) =>{
 
     const selectCompetitor = () =>{
         setIsSelected(!isSelected)
-        console.log("Selected clicked");
         
         if(isSelected === false){
             selected(element)

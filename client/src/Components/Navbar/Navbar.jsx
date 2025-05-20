@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState} from "react"
 import { socket } from "../../socket"
 import { Navigate } from "react-router-dom"
 import styles from "./Navbar.module.css"

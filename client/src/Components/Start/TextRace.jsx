@@ -2,7 +2,7 @@ import React,{useEffect, useState, useRef, useContext} from "react";
 import data from "../../Components/Start/text.json"
 import { socket } from "../../socket";
 import { RoomId, AllCompetitors } from "../../Context";
-import { Link, Navigate } from "react-router-dom";
+import {Navigate } from "react-router-dom";
 
 
 // JSS CSS START

@@ -11,8 +11,8 @@ export const Welcome = () =>{
     const [displayOnlineUsers, setDisplayOnlineUsers] = useState(false)
     const [displayMessage, setDisplayMessage] = useState(false)
     // Context
-    const {currentUser,setCurrentUser} = useContext(UserNameContext)
-    const {currentUserImg, setCurrentUserImg} = useContext(ImageUrlContext)
+    const {currentUser} = useContext(UserNameContext)
+    const {currentUserImg} = useContext(ImageUrlContext)
 
     const goOnline = () =>{
         if(currentUser && currentUserImg){

@@ -42,7 +42,6 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg,
         const onSendBackCompetitors = (joinCompetitors) =>{   
             // Filtering competitors to exclude you
             const currentCompetitor = joinCompetitors.filter(element => socket.id !== element.socketId)
-            console.log("Competitor back", currentCompetitor);            
             setAllCompetitors(currentCompetitor) 
         }
         
@@ -126,8 +125,8 @@ export const Request = ({competitor, display, isRequestSent, displayWecomingMsg,
 
     return(
         <div className={display ? "welcome-request-container" : "welcome-request-container non-active" }>
-            <h2 className="title2">Select an online user in order to be able to play with </h2>
-            <h3 className="title2">Or wait for an other user to call you</h3>
+            <h2 className="title2">Select an online user to play with. </h2>
+            <h3 className="title2">Or wait for another user to call you</h3>
             {sendRequest && <p className="request">Requesting ....</p>}
             {validetedRequest && 
                 <p className="validRequest">

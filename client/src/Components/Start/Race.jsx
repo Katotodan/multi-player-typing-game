@@ -1,4 +1,4 @@
-import React,{useState, useContext, useEffect} from "react";
+import React,{useContext, useEffect} from "react";
 import { SingleRace } from "./SingleRace";
 import { AllCompetitors, ImageUrlContext } from "../../Context";
 import { socket } from "../../socket";
@@ -66,6 +66,4 @@ export const Race = ({percentage}) =>{
             {competitors}
         </div>
     )
-} 
- 
-// Try to figure it out why competitors are not comming all
+}

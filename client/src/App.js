@@ -5,7 +5,6 @@ import { Start } from './Pages/Start';
 import { RequestUserPage } from './Pages/RequestPage/RequestUserPage';
 import {
   BrowserRouter,
-  Link,
   Route,
   Routes,
 } from "react-router-dom"

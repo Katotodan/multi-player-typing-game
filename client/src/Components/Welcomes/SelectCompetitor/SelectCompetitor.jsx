@@ -12,7 +12,7 @@ export const SelectCompetitor = ({selectedCompetitor, display}) =>{
 
     useEffect(() =>{
         // Get online user from the server
-        axios.get("http://localhost:5000/getUser")
+        axios.get(`${process.env.REACT_APP_API_URL}/getUser`)
         .then((res) => {            
             setOnlineUser(res.data)
         })
@@ -21,11 +21,8 @@ export const SelectCompetitor = ({selectedCompetitor, display}) =>{
 
     useEffect(() =>{
         // Socket config
-        socket.on("newUser", (data) =>{  
-            console.log("New user added");
-             
+        socket.on("newUser", (data) =>{               
             setOnlineUser((prev) => [...prev, data])
-         
         })
         socket.on("userDisconnect", (actifUsers) =>{
             setOnlineUser(actifUsers)
@@ -58,7 +55,7 @@ export const SelectCompetitor = ({selectedCompetitor, display}) =>{
 
     
     useEffect(()=>{
-        setOnlineUserList(onlineUser.map((element,index) =>{
+        setOnlineUserList(onlineUser.map((element) =>{
             if(element.socketId !== socket.id){                
                 return( 
                 <SingleOnlineCompetitor Competitor element={element} 

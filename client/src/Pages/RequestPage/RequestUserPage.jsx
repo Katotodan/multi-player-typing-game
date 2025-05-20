@@ -4,7 +4,7 @@ import { Request } from "../../Components/Welcomes/Request/Request";
 import { SelectCompetitor } from "../../Components/Welcomes/SelectCompetitor/SelectCompetitor";
 import { Navbar } from "../../Components/Navbar/Navbar";
 import { UserNameContext, ImageUrlContext, AllCompetitors } from "../../Context";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "./RequestUserPage.css"
 import { Search, X } from "lucide-react";
 import { SendRequest } from "../../Components/Welcomes/SendRequest/SendRequest";
