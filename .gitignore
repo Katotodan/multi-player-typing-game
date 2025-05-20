@@ -4,6 +4,7 @@
 /node_modules
 /client/node_modules
 /backend/node_modules
+/backend/.env
 
 /client/.pnp
 /client/.pnp.js

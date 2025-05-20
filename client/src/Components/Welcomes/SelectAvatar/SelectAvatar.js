@@ -19,7 +19,7 @@ export const SelectAvatar = () =>{
         return(
             <button className="avatart-btn" key={index} onClick={() => selectImg(element.url)}>
                 <img src={element.url} key={index} 
-                className="avatar-img" alt="Avatar img"/>
+                className="avatar-img" alt="Avatar img" loading='lazy'/>
                 {currentUserImg === element.url && <span className="selected">✔</span>}
             </button>
             

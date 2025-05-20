@@ -8,6 +8,8 @@ require("dotenv").config()
 const process = require('process')
 
 const app = express();
+const PORT = process.env.PORT
+
 app.use(cors({
   origin: process.env.FRONTEND_URL
 }))
@@ -86,8 +88,8 @@ app.get("/getUser", (req, res) =>{
 })   
 
 
-server.listen(5000, () => {
-  console.log('server running at http://localhost:5000');
+server.listen(PORT || 5000, () => {
+  console.log('server running on port ' + process.env.PORT);
 });
 
 // Event 'warning'  
